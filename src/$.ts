@@ -1,8 +1,31 @@
 const NAV_ITEM_SELECTOR = 'ytd-guide-entry-renderer';
+const navEl = (title: string): HTMLElement => {
+	return document.querySelector(`${NAV_ITEM_SELECTOR}:has(a[title="${title}"])`) as HTMLElement;
+};
 export const navigation = {
-	consts: {
-		NAV_ITEM_SELECTOR,
+	items(): HTMLElement {
+		return document.querySelector('#sections > ytd-guide-section-renderer:nth-child(1) > #items') as HTMLElement;
 	},
+	shorts(): HTMLElement {
+		return navEl('Shorts');
+	},
+	home(): HTMLElement {
+		return navEl('Home');
+	},
+	liked(): HTMLElement {
+		return navEl('Liked videos');
+	},
+	showMore(): HTMLElement {
+		return navEl('Show more');
+	},
+	showLess(): HTMLElement {
+		return navEl('Show less');
+	},
+
+	consts: Object.freeze({
+		NAV_ITEM_SELECTOR,
+	}),
+
 	async ready(): Promise<'ready' | 'time is out'> {
 		let interval: ReturnType<typeof setTimeout> | null = null;
 		const ready = new Promise<'ready'>(resolve => {
@@ -26,24 +49,6 @@ export const navigation = {
 		}
 
 		return promise;
-	},
-	items(): HTMLElement {
-		return document.querySelector('#sections > ytd-guide-section-renderer:nth-child(1) > #items') as HTMLElement;
-	},
-	shorts(): HTMLElement {
-		return document.querySelector(`${NAV_ITEM_SELECTOR}:has(a[title="Shorts"])`) as HTMLElement;
-	},
-	home(): HTMLElement {
-		return document.querySelector(`${NAV_ITEM_SELECTOR}:has(a[title="Home"])`) as HTMLElement;
-	},
-	liked(): HTMLElement {
-		return document.querySelector(`${NAV_ITEM_SELECTOR}:has(a[title="Liked videos"])`) as HTMLElement;
-	},
-	showMore(): HTMLElement {
-		return document.querySelector('a[title="Show more"]') as HTMLElement;
-	},
-	showLess(): HTMLElement {
-		return document.querySelector('a[title="Show less"]') as HTMLElement;
 	},
 };
 
