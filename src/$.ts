@@ -30,7 +30,7 @@ export const navigation = {
 		let interval: ReturnType<typeof setTimeout> | null = null;
 		const ready = new Promise<'ready'>(resolve => {
 			interval = setInterval(() => {
-				const shorts = document.querySelector(`${NAV_ITEM_SELECTOR}:has(a[title="Shorts"])`) as HTMLElement;
+				const shorts = this.shorts() as HTMLElement | null;
 				if (shorts) {
 					resolve('ready');
 				}
