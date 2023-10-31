@@ -11,5 +11,11 @@ const manifest = {
 			matches: ['https://*.youtube.com/*'],
 		},
 	],
+	action: {
+		default_title: 'Add Video Category',
+		default_popup: 'src/popup/index.html',
+	},
+
+	permissions: ['storage'],
 } satisfies ManifestV3Export;
 export default defineManifest(manifest);
