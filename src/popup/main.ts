@@ -1,12 +1,6 @@
 import { Storage } from '../Storage';
 import { VideoCategoriesElement } from './wc-video-categories';
 
-declare global {
-	interface Document {
-		startViewTransition: (callback: () => void) => Promise<unknown>;
-	}
-}
-
 VideoCategoriesElement.define();
 
 async function main() {
