@@ -1,1 +1,1 @@
-Chrome V3 Extension for youtube navigation manipulations
+Chrome V3 Extension for youtube 
