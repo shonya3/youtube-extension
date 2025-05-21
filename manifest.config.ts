@@ -5,7 +5,7 @@ const manifest = {
 	version: '0.1.0',
 	manifest_version: 3,
 	host_permissions: ['<all_urls>'], // https://github.com/crxjs/chrome-extension-tools/issues/971
-	description: 'Chrome V3 Extension for youtube navigation manipulations',
+	description: 'Chrome V3 Extension for youtube',
 	content_scripts: [
 		{
 			js: ['src/content-scripts/main.ts'],
