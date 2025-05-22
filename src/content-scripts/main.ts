@@ -1,5 +1,5 @@
-import { Storage } from '../Storage';
-import { waitForNavigation } from './Navigation';
+import { Storage } from '../extension-storage';
+import { waitForNavigation } from './nav';
 import { waitFor, waitForChip } from './wait';
 
 main();

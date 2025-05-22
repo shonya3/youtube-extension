@@ -1,4 +1,4 @@
-import { Storage } from '../Storage';
+import { Storage } from '../extension-storage';
 import { VideoCategoriesElement } from './wc-video-categories';
 
 VideoCategoriesElement.define();
