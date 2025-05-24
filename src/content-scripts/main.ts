@@ -5,17 +5,14 @@ import { waitFor, waitForChip } from './wait';
 main();
 
 async function main() {
-	//@ts-expect-error
-	window.navigation.addEventListener('navigate', event => {
-		const { pathname } = new URL(event.destination.url);
-		if (pathname === '/watch') {
+	document.addEventListener('yt-navigate-finish', () => {
+		if (isWatchPage()) {
 			return;
 		}
 		updateVidsPerRow();
 	});
 
-	const { pathname } = new URL(window.location.href);
-	if (pathname === '/watch') {
+	if (isWatchPage()) {
 		return;
 	}
 
@@ -24,6 +21,10 @@ async function main() {
 	const categories = await Storage.getOrDefault('categories', []);
 	const chip = await waitForChip(categories);
 	chip?.click();
+}
+
+function isWatchPage(): boolean {
+	return new URL(window.location.href).pathname === '/watch';
 }
 
 async function updateVidsPerRow() {
@@ -36,7 +37,7 @@ async function updateVidsPerRow() {
 		container.style.setProperty('--ytd-rich-grid-items-per-row', '5');
 	};
 
-	setTimeout(update, 2000);
+	setTimeout(update, 300);
 	update();
 }
 
