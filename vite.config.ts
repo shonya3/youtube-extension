@@ -1,7 +1,11 @@
 import { defineConfig } from 'vite';
 import { crx } from '@crxjs/vite-plugin';
-import manifest from './manifest.config'; // Node 14 & 16
+import { manifest } from './manifest.config';
+import zip from 'vite-plugin-zip-pack';
 
 export default defineConfig({
-	plugins: [crx({ manifest })],
+	plugins: [
+		crx({ manifest }),
+		zip({ outDir: 'release', outFileName: `crx-${manifest.name}-${manifest.version}.zip` }),
+	],
 });

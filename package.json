@@ -1,7 +1,7 @@
 {
 	"name": "youtube-extension",
 	"private": true,
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -9,12 +9,13 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"@crxjs/vite-plugin": "^2.0.0-beta.33",
-		"@types/chrome": "^0.0.323",
-		"typescript": "^5.8.3",
-		"vite": "^6.3.5"
+		"@crxjs/vite-plugin": "2.2.1",
+		"@types/chrome": "^0.1.28",
+		"typescript": "^5.9.3",
+		"vite": "^7.2.2",
+		"vite-plugin-zip-pack": "^1.2.4"
 	},
 	"dependencies": {
-		"lit": "^3.3.0"
+		"lit": "^3.3.1"
 	}
 }

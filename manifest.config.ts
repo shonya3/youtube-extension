@@ -1,8 +1,9 @@
-import { defineManifest, ManifestV3Export } from '@crxjs/vite-plugin';
+import { ManifestV3Export } from '@crxjs/vite-plugin';
+import pkg from './package.json';
 
-const manifest = {
-	name: 'Youtube extension',
-	version: '0.1.0',
+export const manifest = {
+	name: pkg.name,
+	version: pkg.version,
 	manifest_version: 3,
 	host_permissions: ['<all_urls>'], // https://github.com/crxjs/chrome-extension-tools/issues/971
 	description: 'Chrome V3 Extension for youtube',
@@ -18,5 +19,4 @@ const manifest = {
 	},
 
 	permissions: ['storage'],
-} satisfies ManifestV3Export;
-export default defineManifest(manifest);
+} as const satisfies ManifestV3Export;
