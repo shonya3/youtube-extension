@@ -1,5 +1,5 @@
 import { Storage } from "../extension-storage";
-import { waitForNavigation } from "./nav";
+import { MainNav } from "./nav";
 import { waitFor, waitForChip } from "./wait";
 
 void main();
@@ -42,13 +42,13 @@ async function updateVidsPerRow() {
 }
 
 async function updateNavigation() {
-  const navigation = await waitForNavigation();
-  if (!navigation) {
-    return;
-  }
+  const n = await MainNav.getMainNav();
+  if (!n) return;
 
-  navigation.shorts().remove();
-  navigation.showMore().click();
-  navigation.home().after(navigation.liked());
-  navigation.showLess().click();
+  n.navEl("Shorts").remove();
+
+  n.sections[2].navEl("Show more")?.click();
+
+  // n.home().after(n.liked());
+  // navigation.showLess().click();
 }

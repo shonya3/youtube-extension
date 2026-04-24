@@ -1,47 +1,64 @@
-import { waitFor } from "./wait";
+import { waitForN } from "./wait";
 
-export class Navigation {
-  ready: Promise<boolean>;
-  static NAV_ITEM_SELECTOR = "ytd-guide-entry-renderer";
+export class MainNav {
+  sections: Section[];
+  static readonly NAV_SECTION_SELECTOR = "ytd-guide-section-renderer";
+  static readonly NAV_ITEM_SELECTOR = "ytd-guide-entry-renderer";
 
-  #navEl(title: string) {
-    return document.querySelector(
-      `${Navigation.NAV_ITEM_SELECTOR}:has(a[title="${title}"])`,
+  /**
+   * Use MainNav.getMainNav
+   */
+  private constructor(sections: Section[]) {
+    this.sections = sections;
+  }
+
+  static async getMainNav(): Promise<MainNav | null> {
+    const sections = await waitForN(MainNav.NAV_SECTION_SELECTOR, 5);
+    if (!sections) return null;
+
+    return new MainNav(sections.map((sEl) => new Section(sEl)));
+  }
+
+  navEl(title: string, root: Element | Document = document) {
+    return root.querySelector(
+      `${MainNav.NAV_ITEM_SELECTOR}:has(a[title="${title}"])`,
     ) as HTMLElement;
   }
 
-  constructor() {
-    this.ready = waitFor(Navigation.NAV_ITEM_SELECTOR).then((navEl) => Boolean(navEl));
-  }
-
-  items(): HTMLElement {
+  /**
+   * @param nth - starts from 0
+   * @returns section el
+   */
+  nthSection(nth: number): HTMLElement {
     return document.querySelector(
-      "#sections > ytd-guide-section-renderer:nth-child(1) > #items",
+      `#sections > ytd-guide-section-renderer:nth-child(${nth + 1})`,
     ) as HTMLElement;
   }
-  shorts(): HTMLElement {
-    return this.#navEl("Shorts");
-  }
-  home(): HTMLElement {
-    return this.#navEl("Home");
-  }
-  liked(): HTMLElement {
-    return this.#navEl("Liked videos");
-  }
-  showMore(): HTMLElement {
-    return this.#navEl("Show more");
-  }
-  showLess(): HTMLElement {
-    return this.#navEl("Show less");
-  }
+  // shorts(): HTMLElement {
+  //   return this.#navEl("Shorts");
+  // }
+  // home(): HTMLElement {
+  //   return this.#navEl("Home");
+  // }
+  // liked(): HTMLElement {
+  //   return this.#navEl("Liked videos");
+  // }
+  // showMore(): HTMLElement {
+  //   return this.#navEl("Show more");
+  // }
+  // showLess(): HTMLElement {
+  //   return this.#navEl("Show less");
+  // }
 }
 
-export const waitForNavigation = async () => {
-  const navigation = new Navigation();
-  await navigation.ready;
-  if (!navigation.ready) {
-    return null;
+class Section {
+  #el: Element;
+
+  constructor(el: Element) {
+    this.#el = el;
   }
 
-  return navigation;
-};
+  navEl(title: string): HTMLElement | null {
+    return this.#el.querySelector(`${MainNav.NAV_ITEM_SELECTOR}:has(a[title="${title}"])`);
+  }
+}

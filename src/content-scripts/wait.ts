@@ -12,8 +12,8 @@ export const waitFor = <T = HTMLElement>(
 ): Promise<T | null> => {
   // oxlint-disable-next-line no-async-promise-executor
   const promise = new Promise<T>(async (resolve) => {
-    const findElement = (selector: string) => {
-      const el = root.querySelector(selector);
+    const findElement = (sel: string) => {
+      const el = root.querySelector(sel);
       if (el instanceof Element) {
         resolve(el as T);
       }
@@ -25,6 +25,32 @@ export const waitFor = <T = HTMLElement>(
       } else {
         findElement(selector);
       }
+
+      await new Promise((r) => setTimeout(r, 50));
+    }
+  });
+
+  return limitTime(promise, timeout);
+};
+
+export const waitForN = (
+  selectorAll: string,
+  N: number,
+  root: Element | Document = document,
+  timeout = 10_000,
+): Promise<Element[] | null> => {
+  // oxlint-disable-next-line no-async-promise-executor
+  const promise = new Promise<Element[]>(async (resolve) => {
+    const findElements = (sel: string) => {
+      const arr = Array.from(root.querySelectorAll(sel));
+      if (arr.length < N) return;
+      if (!(arr[0] instanceof Element)) return;
+
+      resolve(arr);
+    };
+
+    while (true) {
+      findElements(selectorAll);
 
       await new Promise((r) => setTimeout(r, 50));
     }
