@@ -1,9 +1,11 @@
 import { waitForN } from "./wait";
 
+const NAV_ITEM_SELECTOR = "ytd-guide-entry-renderer";
+
 export class MainNav {
   sections: Section[];
   static readonly NAV_SECTION_SELECTOR = "ytd-guide-section-renderer";
-  static readonly NAV_ITEM_SELECTOR = "ytd-guide-entry-renderer";
+  static readonly NAV_ITEM_SELECTOR = NAV_ITEM_SELECTOR;
 
   /**
    * Use MainNav.getMainNav
@@ -34,6 +36,11 @@ export class MainNav {
       `#sections > ytd-guide-section-renderer:nth-child(${nth + 1})`,
     ) as HTMLElement;
   }
+
+  navElements() {
+    return this.sections.flatMap((s) => s.navElements());
+  }
+
   // shorts(): HTMLElement {
   //   return this.#navEl("Shorts");
   // }
@@ -52,13 +59,31 @@ export class MainNav {
 }
 
 class Section {
-  #el: Element;
+  el: HTMLElement;
 
-  constructor(el: Element) {
-    this.#el = el;
+  constructor(el: HTMLElement) {
+    this.el = el;
+  }
+
+  navElements(): Array<NavEl> {
+    return Array.from(this.el.querySelectorAll<HTMLElement>(NAV_ITEM_SELECTOR)).map(
+      (el) => new NavEl(el),
+    );
   }
 
   navEl(title: string): HTMLElement | null {
-    return this.#el.querySelector(`${MainNav.NAV_ITEM_SELECTOR}:has(a[title="${title}"])`);
+    return this.el.querySelector(`${NAV_ITEM_SELECTOR}:has(a[title="${title}"])`);
+  }
+}
+
+class NavEl {
+  el: HTMLElement;
+
+  constructor(el: HTMLElement) {
+    this.el = el;
+  }
+
+  get name() {
+    return this.el.textContent.trim();
   }
 }

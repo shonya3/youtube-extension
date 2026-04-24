@@ -36,15 +36,15 @@ export const waitFor = <T = HTMLElement>(
 export const waitForN = (
   selectorAll: string,
   N: number,
-  root: Element | Document = document,
+  root: HTMLElement | Document = document,
   timeout = 10_000,
-): Promise<Element[] | null> => {
+): Promise<HTMLElement[] | null> => {
   // oxlint-disable-next-line no-async-promise-executor
-  const promise = new Promise<Element[]>(async (resolve) => {
+  const promise = new Promise<HTMLElement[]>(async (resolve) => {
     const findElements = (sel: string) => {
-      const arr = Array.from(root.querySelectorAll(sel));
+      const arr = Array.from(root.querySelectorAll<HTMLElement>(sel));
       if (arr.length < N) return;
-      if (!(arr[0] instanceof Element)) return;
+      if (!(arr[0] instanceof HTMLElement)) return;
 
       resolve(arr);
     };
