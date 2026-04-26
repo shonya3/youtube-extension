@@ -42,12 +42,37 @@ async function updateVidsPerRow() {
 }
 
 async function updateNavigation() {
-  const n = await MainNav.getMainNav();
-  if (!n) return;
+  await MainNav.ready();
 
-  n.navEl("Shorts").remove();
+  console.log(MainNav.navElements[20]);
 
-  n.sections[2].navEl("Show more")?.click();
+  // const youSection = MainNav.sections[2];
+  // console.log(youSection);
+
+  // console.log(youSection.heading);
+  // for (const section of MainNav.sections) {
+  //   console.log(section.heading);
+  // }
+
+  // const header = youSection.navElements.find((n) => n.specialKind === "header-entry");
+  // console.log(`Header: `, header, " name: ", header?.name, header?.href);
+
+  // const arr = n.navElements.map((n) => ({ [n.name]: n.el }));
+  // console.log(arr);
+
+  // n.sections[2].navElements.forEach((el) => console.log(el.name));
+
+  // n.navEl("Shorts").remove();
+
+  // n.sections[2].navEl("Show more")?.click();
+
+  // const navEls = n
+  //   .navElements()
+  //   .map((el) => el.el)
+  //   .map((el) => new NavEl(el));
+  // navEls.forEach((el) => console.log(el.el, el.specialKind));
+
+  // console.log("Here");
 
   // n.home().after(n.liked());
   // navigation.showLess().click();
