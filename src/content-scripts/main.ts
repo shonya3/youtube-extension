@@ -16,7 +16,8 @@ async function main() {
     return;
   }
 
-  await Promise.all([updateVidsPerRow(), updateNavigation()]);
+  await updateVidsPerRow();
+  await updateNavigation();
 
   const categories = await Storage.getOrDefault("categories", []);
   const chip = await waitForChip(categories);
@@ -44,36 +45,27 @@ async function updateVidsPerRow() {
 async function updateNavigation() {
   await MainNav.ready();
 
-  console.log(MainNav.navElements[20]);
+  const you = MainNav.findSection("You");
+  if (you) {
+    MainNav.sections[0].el.before(you.el);
 
-  // const youSection = MainNav.sections[2];
-  // console.log(youSection);
+    you.showMore();
+    you.findNavEl("Show less")?.el.remove();
 
-  // console.log(youSection.heading);
-  // for (const section of MainNav.sections) {
-  //   console.log(section.heading);
-  // }
+    const music = MainNav.findNavEl("YouTube Music");
+    if (music) you.el.append(music.el);
+  }
 
-  // const header = youSection.navElements.find((n) => n.specialKind === "header-entry");
-  // console.log(`Header: `, header, " name: ", header?.name, header?.href);
+  ["Downloads", "Shorts", "Movies", "YouTube Kids", "Report history", "Home"]
+    .map((t) => MainNav.findNavEl(t))
+    .filter((e) => e !== null)
+    .forEach((e) => e.el.remove());
+  MainNav.removeEmptySections();
 
-  // const arr = n.navElements.map((n) => ({ [n.name]: n.el }));
-  // console.log(arr);
+  ["Explore", "Subscriptions"]
+    .map((t) => MainNav.findSection(t))
+    .filter((s) => s !== null)
+    .forEach((s) => s.wrapInDetails());
 
-  // n.sections[2].navElements.forEach((el) => console.log(el.name));
-
-  // n.navEl("Shorts").remove();
-
-  // n.sections[2].navEl("Show more")?.click();
-
-  // const navEls = n
-  //   .navElements()
-  //   .map((el) => el.el)
-  //   .map((el) => new NavEl(el));
-  // navEls.forEach((el) => console.log(el.el, el.specialKind));
-
-  // console.log("Here");
-
-  // n.home().after(n.liked());
-  // navigation.showLess().click();
+  MainNav.footer.remove();
 }

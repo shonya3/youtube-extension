@@ -4,6 +4,7 @@ const NAV_ITEM_SELECTOR = "ytd-guide-entry-renderer";
 const NAV_SECTION_SELECTOR = "ytd-guide-section-renderer";
 
 export class MainNav {
+  static readonly SELECTOR = "tp-yt-app-drawer#guide";
   static readonly NAV_SECTION_SELECTOR = "ytd-guide-section-renderer";
   static readonly NAV_ITEM_SELECTOR = NAV_ITEM_SELECTOR;
 
@@ -12,8 +13,20 @@ export class MainNav {
    */
   private constructor() {}
 
+  static findNavEl(name: string): NavEl | null {
+    return MainNav.navElements.find((n) => n.name.includes(name)) ?? null;
+  }
+
+  static findSection(name: string): Section | null {
+    return MainNav.sections.find((s) => s.heading?.title.includes(name)) ?? null;
+  }
+
   static async ready(): Promise<void> {
     await waitForN(MainNav.NAV_SECTION_SELECTOR, 5);
+  }
+
+  static get el(): HTMLElement {
+    return document.querySelector(MainNav.SELECTOR)!;
   }
 
   static get sections(): Section[] {
@@ -22,10 +35,12 @@ export class MainNav {
     );
   }
 
-  static navEl(title: string, root: Element | Document = document) {
-    return root.querySelector(
-      `${MainNav.NAV_ITEM_SELECTOR}:has(a[title="${title}"])`,
-    ) as HTMLElement;
+  static get footer(): HTMLElement {
+    return MainNav.el.querySelector("#footer")!;
+  }
+
+  static removeEmptySections() {
+    MainNav.sections.filter((s) => s.navElements.length === 0).forEach((s) => s.el.remove());
   }
 
   /**
@@ -43,8 +58,19 @@ export class MainNav {
   }
 }
 
-class Section {
+export class Section {
   el: HTMLElement;
+
+  showMore() {
+    const expander = this.navElements.find((el) => el.specialKind === "expander-item");
+    if (expander) {
+      expander.el.click();
+    }
+  }
+
+  findNavEl(name: string): NavEl | null {
+    return this.navElements.find((n) => n.name.includes(name)) ?? null;
+  }
 
   static readonly SELECTOR = NAV_SECTION_SELECTOR;
 
@@ -93,6 +119,30 @@ class Section {
 
   navEl(title: string): HTMLElement | null {
     return this.el.querySelector(`${NAV_ITEM_SELECTOR}:has(a[title="${title}"])`);
+  }
+
+  wrapInDetails() {
+    const details = document.createElement("details");
+
+    const summary = Object.assign(document.createElement("summary"), {
+      innerText: this.heading?.title ?? "Summary",
+      style: "font-size: 16px;padding-left: 1rem",
+    });
+
+    details.append(summary);
+
+    const h3 = this.el.querySelector("h3");
+    if (h3) {
+      h3.remove();
+    }
+
+    const innerContainer = Object.assign(document.createElement("div"), {
+      style: "padding-block: 16px;",
+    });
+    details.append(innerContainer);
+    Array.from(this.el.children).forEach((ch) => innerContainer.append(ch));
+
+    this.el.append(details);
   }
 }
 
