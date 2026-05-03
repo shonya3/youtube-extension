@@ -7,14 +7,14 @@ async function main() {
 
   document.documentElement.style.setProperty("--shonya-text-color", getCurrentColor());
 
-  await updateNavMenu();
+  updateNavMenu();
 }
 
 async function pageReady() {
   await NavMenu.ready();
 }
 
-async function updateNavMenu() {
+function updateNavMenu() {
   const you = NavMenu.findSection("You");
   if (you) {
     NavMenu.sections[0].el.before(you.el);
