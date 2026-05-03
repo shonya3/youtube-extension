@@ -126,7 +126,7 @@ export class Section {
 
     const summary = Object.assign(document.createElement("summary"), {
       innerText: this.heading?.title ?? "Summary",
-      style: "font-size: 16px;padding-left: 1rem",
+      style: "font-size: 16px;padding-left: 1rem;color:var(--shonya-text-color)",
     });
 
     details.append(summary);

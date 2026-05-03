@@ -5,6 +5,8 @@ await main();
 async function main() {
   await pageReady();
 
+  document.documentElement.style.setProperty("--shonya-text-color", getCurrentColor());
+
   await updateNavMenu();
 }
 
@@ -36,4 +38,12 @@ async function updateNavMenu() {
     .forEach((s) => s.wrapInDetails());
 
   NavMenu.footer.remove();
+}
+
+function getCurrentColor() {
+  const navEl = NavMenu.navElements.at(0);
+  const titleEl = navEl?.el.querySelector("yt-formatted-string");
+  if (!titleEl) return "currentColor";
+
+  return window.getComputedStyle(titleEl).color;
 }
