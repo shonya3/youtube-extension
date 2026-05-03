@@ -1,17 +1,9 @@
-import { defineConfig } from "vite-plus";
+import { defineConfig } from "vite";
 import { crx } from "@crxjs/vite-plugin";
 import zip from "vite-plugin-zip-pack";
 import pkg from "./package.json" with { type: "json" };
 
 export default defineConfig({
-  staged: {
-    "*": "vp check --fix",
-  },
-  fmt: {},
-  lint: {
-    options: { typeAware: true, typeCheck: true },
-    rules: { "typescript/unbound-method": "off" },
-  },
   plugins: [
     crx({
       manifest: {

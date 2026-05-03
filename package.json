@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp dev",
+    "dev": "vite dev",
     "build": "tsc && vp build",
     "preview": "vp preview",
     "prepare": "vp config"
@@ -15,10 +15,11 @@
   "devDependencies": {
     "@crxjs/vite-plugin": "2.2.1",
     "@types/chrome": "^0.1.28",
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
     "typescript": "^5.9.3",
     "vite": "catalog:",
-    "vite-plugin-zip-pack": "^1.2.4",
-    "vite-plus": "catalog:"
+    "vite-plugin-zip-pack": "^1.2.4"
   },
   "packageManager": "pnpm@10.33.2"
 }
