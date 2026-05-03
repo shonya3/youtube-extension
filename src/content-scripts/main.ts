@@ -1,45 +1,29 @@
-import { Storage } from "../extension-storage";
 import { MainNav } from "./nav";
-import { waitFor, waitForChip } from "./wait";
 
-void main();
-
+await main();
 async function main() {
-  document.addEventListener("yt-navigate-finish", async () => {
-    if (isWatchPage()) {
-      return;
-    }
-    await updateVidsPerRow();
-  });
+  await MainNav.ready();
+  document.addEventListener("yt-navigate-finish", handlePageNavigation);
+  document.dispatchEvent(new CustomEvent("yt-navigate-finish"));
 
+  await updateNavigation();
+}
+
+async function handlePageNavigation() {
   if (isWatchPage()) {
     return;
   }
 
-  await updateVidsPerRow();
-  await updateNavigation();
+  const vidsContainer = document.querySelector<HTMLElement>(
+    "ytd-two-column-browse-results-renderer #contents",
+  )!;
 
-  const categories = await Storage.getOrDefault("categories", []);
-  const chip = await waitForChip(categories);
-  chip?.click();
+  setStyles(vidsContainer, { maxWidth: "1500px" });
+  vidsContainer.style.setProperty("--ytd-rich-grid-items-per-row", "4");
 }
 
 function isWatchPage(): boolean {
   return new URL(window.location.href).pathname === "/watch";
-}
-
-async function updateVidsPerRow() {
-  const container = await waitFor("ytd-rich-grid-renderer");
-  if (!container) {
-    return;
-  }
-
-  const update = () => {
-    container.style.setProperty("--ytd-rich-grid-items-per-row", "5");
-  };
-
-  setTimeout(update, 300);
-  update();
 }
 
 async function updateNavigation() {
@@ -68,4 +52,14 @@ async function updateNavigation() {
     .forEach((s) => s.wrapInDetails());
 
   MainNav.footer.remove();
+}
+
+export function setStyles<K extends keyof CSSStyleDeclaration>(
+  el: HTMLElement,
+  styles: Record<K, string>,
+): void {
+  Object.entries(styles).forEach(([k, v]) => {
+    //@ts-expect-error
+    el.style[k] = v;
+  });
 }

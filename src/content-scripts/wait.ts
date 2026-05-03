@@ -58,10 +58,3 @@ export const waitForN = (
 
   return limitTime(promise, timeout);
 };
-
-export const waitForChip = async (categories: string[]): Promise<HTMLElement | null> => {
-  const chips = await waitFor("#chips");
-  if (!chips) return null;
-  const selectors = categories.map((category) => `[title = "${category}"]`);
-  return waitFor(selectors, chips);
-};
