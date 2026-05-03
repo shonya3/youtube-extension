@@ -3,13 +3,13 @@ import { NavMenu } from "./nav";
 await main();
 async function main() {
   await NavMenu.ready();
-  document.addEventListener("yt-navigate-finish", handlePageNavigation);
+  document.addEventListener("yt-navigate-finish", updateVidsContainer);
   document.dispatchEvent(new CustomEvent("yt-navigate-finish"));
 
   await updateNavMenu();
 }
 
-async function handlePageNavigation() {
+async function updateVidsContainer() {
   if (isWatchPage()) {
     return;
   }
