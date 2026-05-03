@@ -1,0 +1,13 @@
+ytd-player,
+ytd-player * {
+  border-radius: 0px !important;
+}
+
+ytd-two-column-browse-results-renderer #contents {
+  --ytd-rich-grid-items-per-row: 5;
+  max-width: 1600px !important;
+
+  yt-thumbnail-view-model {
+    border-radius: 0px !important;
+  }
+}

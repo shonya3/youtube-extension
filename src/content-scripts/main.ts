@@ -1,34 +1,18 @@
 import { NavMenu } from "./nav";
+import "./styles.css";
 
 await main();
 async function main() {
-  await NavMenu.ready();
-  document.addEventListener("yt-navigate-finish", updateVidsContainer);
-  document.dispatchEvent(new CustomEvent("yt-navigate-finish"));
+  await pageReady();
 
   await updateNavMenu();
 }
 
-async function updateVidsContainer() {
-  if (isWatchPage()) {
-    return;
-  }
-
-  const vidsContainer = document.querySelector<HTMLElement>(
-    "ytd-two-column-browse-results-renderer #contents",
-  )!;
-
-  setStyles(vidsContainer, { maxWidth: "1500px" });
-  vidsContainer.style.setProperty("--ytd-rich-grid-items-per-row", "4");
-}
-
-function isWatchPage(): boolean {
-  return new URL(window.location.href).pathname === "/watch";
+async function pageReady() {
+  await NavMenu.ready();
 }
 
 async function updateNavMenu() {
-  await NavMenu.ready();
-
   const you = NavMenu.findSection("You");
   if (you) {
     NavMenu.sections[0].el.before(you.el);
@@ -52,14 +36,4 @@ async function updateNavMenu() {
     .forEach((s) => s.wrapInDetails());
 
   NavMenu.footer.remove();
-}
-
-export function setStyles<K extends keyof CSSStyleDeclaration>(
-  el: HTMLElement,
-  styles: Record<K, string>,
-): void {
-  Object.entries(styles).forEach(([k, v]) => {
-    //@ts-expect-error
-    el.style[k] = v;
-  });
 }
