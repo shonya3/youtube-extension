@@ -5,9 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "tsc && vp build",
-    "preview": "vp preview",
-    "prepare": "vp config"
+    "build": "tsc && vp build"
   },
   "dependencies": {
     "lit": "^3.3.1"
