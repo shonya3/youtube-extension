@@ -1,12 +1,12 @@
-import { MainNav } from "./nav";
+import { NavMenu } from "./nav";
 
 await main();
 async function main() {
-  await MainNav.ready();
+  await NavMenu.ready();
   document.addEventListener("yt-navigate-finish", handlePageNavigation);
   document.dispatchEvent(new CustomEvent("yt-navigate-finish"));
 
-  await updateNavigation();
+  await updateNavMenu();
 }
 
 async function handlePageNavigation() {
@@ -26,32 +26,32 @@ function isWatchPage(): boolean {
   return new URL(window.location.href).pathname === "/watch";
 }
 
-async function updateNavigation() {
-  await MainNav.ready();
+async function updateNavMenu() {
+  await NavMenu.ready();
 
-  const you = MainNav.findSection("You");
+  const you = NavMenu.findSection("You");
   if (you) {
-    MainNav.sections[0].el.before(you.el);
+    NavMenu.sections[0].el.before(you.el);
 
     you.showMore();
     you.findNavEl("Show less")?.el.remove();
 
-    const music = MainNav.findNavEl("YouTube Music");
+    const music = NavMenu.findNavEl("YouTube Music");
     if (music) you.el.append(music.el);
   }
 
   ["Downloads", "Shorts", "Movies", "YouTube Kids", "Report history", "Home"]
-    .map((t) => MainNav.findNavEl(t))
+    .map((t) => NavMenu.findNavEl(t))
     .filter((e) => e !== null)
     .forEach((e) => e.el.remove());
-  MainNav.removeEmptySections();
+  NavMenu.removeEmptySections();
 
   ["Explore", "Subscriptions"]
-    .map((t) => MainNav.findSection(t))
+    .map((t) => NavMenu.findSection(t))
     .filter((s) => s !== null)
     .forEach((s) => s.wrapInDetails());
 
-  MainNav.footer.remove();
+  NavMenu.footer.remove();
 }
 
 export function setStyles<K extends keyof CSSStyleDeclaration>(

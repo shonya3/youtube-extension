@@ -3,44 +3,44 @@ import { waitForN } from "./wait";
 const NAV_ITEM_SELECTOR = "ytd-guide-entry-renderer";
 const NAV_SECTION_SELECTOR = "ytd-guide-section-renderer";
 
-export class MainNav {
+export class NavMenu {
   static readonly SELECTOR = "tp-yt-app-drawer#guide";
   static readonly NAV_SECTION_SELECTOR = "ytd-guide-section-renderer";
   static readonly NAV_ITEM_SELECTOR = NAV_ITEM_SELECTOR;
 
   /**
-   * Use MainNav.ready and static methods
+   * Use NavMenu.ready and static methods
    */
   private constructor() {}
 
   static findNavEl(name: string): NavEl | null {
-    return MainNav.navElements.find((n) => n.name.includes(name)) ?? null;
+    return NavMenu.navElements.find((n) => n.name.includes(name)) ?? null;
   }
 
   static findSection(name: string): Section | null {
-    return MainNav.sections.find((s) => s.heading?.title.includes(name)) ?? null;
+    return NavMenu.sections.find((s) => s.heading?.title.includes(name)) ?? null;
   }
 
   static async ready(): Promise<void> {
-    await waitForN(MainNav.NAV_SECTION_SELECTOR, 5);
+    await waitForN(NavMenu.NAV_SECTION_SELECTOR, 5);
   }
 
   static get el(): HTMLElement {
-    return document.querySelector(MainNav.SELECTOR)!;
+    return document.querySelector(NavMenu.SELECTOR)!;
   }
 
   static get sections(): Section[] {
-    return Array.from(document.querySelectorAll<HTMLElement>(MainNav.NAV_SECTION_SELECTOR)).map(
+    return Array.from(document.querySelectorAll<HTMLElement>(NavMenu.NAV_SECTION_SELECTOR)).map(
       (el) => new Section(el),
     );
   }
 
   static get footer(): HTMLElement {
-    return MainNav.el.querySelector("#footer")!;
+    return NavMenu.el.querySelector("#footer")!;
   }
 
   static removeEmptySections() {
-    MainNav.sections.filter((s) => s.navElements.length === 0).forEach((s) => s.el.remove());
+    NavMenu.sections.filter((s) => s.navElements.length === 0).forEach((s) => s.el.remove());
   }
 
   /**
@@ -54,7 +54,7 @@ export class MainNav {
   }
 
   static get navElements() {
-    return MainNav.sections.flatMap((s) => s.navElements);
+    return NavMenu.sections.flatMap((s) => s.navElements);
   }
 }
 
@@ -84,8 +84,8 @@ export class Section {
   }
 
   get nth(): number {
-    console.log(MainNav.sections.map((s) => s.uuid));
-    return MainNav.sections.findIndex((s) => s.uuid === this.uuid);
+    console.log(NavMenu.sections.map((s) => s.uuid));
+    return NavMenu.sections.findIndex((s) => s.uuid === this.uuid);
   }
 
   get heading(): { title: string; href?: string | undefined | null } | null {
